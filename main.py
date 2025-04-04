@@ -2,6 +2,7 @@ import os
 import sys
 import vlc
 from functools import partial
+import meta_edit
 
 print = partial(print, sep = '', end = '')
 
