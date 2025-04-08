@@ -74,10 +74,12 @@ def dir_option_change_in_all(dir_name: str) -> int:
             name = [answers['artist'], answers['album']]
         case _:
             raise RuntimeError('Unrecognized option')
+    handles: list[mutagen.mp3.EasyMP3] = []
     for file in os.scandir(dir_name):
         _, extension = os.path.splitext(file.path)
         if(file.is_file() and extension == '.mp3'):
             mp3_handle = get_mp3_file(file.path)
+            handles.append(mp3_handle)
             match field_changed:
                 case 0:
                     edit_mp3_artist(mp3_handle, name)
@@ -86,8 +88,14 @@ def dir_option_change_in_all(dir_name: str) -> int:
                 case 2:
                     artist, album = tuple(name)
                     edit_mp3_tags(mp3_handle, artist, album)
-            save_mp3_file(mp3_handle)
             affected_files += 1
+    confirm_changes: bool = inquirer.confirm(
+        f'Do you wish to save the changes? {affected_files} files will be affected', default=True)
+    if confirm_changes:
+        for handle in handles:
+            save_mp3_file(handle)
+    else:
+        affected_files = 0
     return affected_files
 
 

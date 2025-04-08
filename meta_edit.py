@@ -1,13 +1,11 @@
-import mutagen.easyid3
 import mutagen.mp3
 
-def get_mp3_file(filename: str) -> mutagen.easyid3.EasyID3:
+def get_mp3_file(filename: str) -> mutagen.mp3.EasyMP3:
     fileHandle: mutagen.File = mutagen.File(filename, easy = True)
-    """if fileHandle is not mutagen.easyid3.EasyID3:
-        raise RuntimeError("file wasn't loaded as MP3, are you sure this is an MP3 file?")
+    if isinstance(fileHandle, mutagen.mp3.EasyMP3):
+        return fileHandle
     else:
-        return fileHandle"""
-    return fileHandle
+        raise RuntimeWarning('File wasn\'t opened as MP3')
     
 def edit_mp3_tags(fileHandle: mutagen.easyid3.EasyID3, 
                   artist: str|None = None, 
