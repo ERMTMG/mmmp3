@@ -1,10 +1,8 @@
 import os
 
-import inquirer.questions
 from meta_edit import *
 from file_iter_detail import *
 import inquirer
-from enum import Enum
 from functools import partial
 
 print = partial(print, sep = '', end = '')
@@ -22,16 +20,6 @@ def list_files_by_chunks(dir_name: str) -> None:
                     f'{items_listed} files listed, continue listing?', default=True)
                 if not continue_listing: 
                     break # maybe not the best thing but i don't really know how else to list files 5 by 5 being able to stop anytime
-
-def remove_prefix_from_file(file: os.DirEntry[str], prefix: str) -> bool:
-    removed: bool = False
-    name: str = file.name
-    if name[0:len(prefix)] == prefix:
-        removed = True
-        newName: str = name[len(prefix):]
-        newPath: str = os.path.join(os.path.dirname(file.path), newName)
-        os.rename(file.path, newPath)
-    return removed
         
 def dir_option_remove_prefix(dir_name: str) -> int:
     view_files: bool = inquirer.confirm(
@@ -43,7 +31,7 @@ def dir_option_remove_prefix(dir_name: str) -> int:
     affected_files: int = 0
     for file in os.scandir(dir_name):
         _, file_extension = os.path.splitext(file.path)
-        if(file.is_file() and file_extension == 'mp3'):
+        if(file.is_file() and file_extension == '.mp3'):
             affected: bool = remove_prefix_from_file(file, prefix)
             if affected: affected_files += 1
     return affected_files
@@ -105,14 +93,19 @@ def iter_directories(directories: list[str]):
             dir_list = os.scandir(dir_name)
             _, _, files = next(os.walk(dir_name))
             file_count = len(files)
-            print("Current directory: ", dir_name, " with ", file_count, " files\n")
+            mp3_file_count = len([file for file in files if file.endswith('.mp3')])
+            if file_count == mp3_file_count:
+                print(f"Current directory: {dir_name}, with {file_count} MP3 files\n")
+            else:
+                print(f"""Current directory: {dir_name}, 
+                      with {file_count} files (of which {mp3_file_count} are MP3's)\n""")
             option: int = inquirer.list_input(
                 f'What do you want to do in {dir_name}?',
                 choices = [
                     ('Remove a prefix from all the files\' names', 0),
                     ('Change all the files\' metadata at once', 1),
-                    (f'Go through the {file_count} files individually',2),
-                    ('Continue to next file', -1),
+                    (f'Go through the {mp3_file_count} files individually',2),
+                    ('Continue to next directory', -1)
                 ])
             match option:
                 case 0:
@@ -128,9 +121,7 @@ def iter_directories(directories: list[str]):
                     else:
                         print(f'\t{affected_files} files affected.\n')
                 case 2:
-                    pass
-                case 3:
-                    pass
+                    dir_option_list_files_detail(dir_name)
                 case -1:
                     pass
                 case _:
