@@ -105,7 +105,7 @@ def iter_directories(directories: list[str]):
                     ('Remove a prefix from all the files\' names', 0),
                     ('Change all the files\' metadata at once', 1),
                     (f'Go through the {mp3_file_count} files individually',2),
-                    ('Continue to next directory', -1)
+                    ('Skip to next directory', -1)
                 ])
             match option:
                 case 0:
@@ -126,3 +126,5 @@ def iter_directories(directories: list[str]):
                     pass
                 case _:
                     raise RuntimeWarning('Unrecognized directory option\n')
+        else:
+            print(f'{dir_name} is not a directory!\n')
