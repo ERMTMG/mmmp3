@@ -1,5 +1,5 @@
 # MMMP3
-MMMP3 is a basic Python utility for bulk editing mp3 file names and metadata, brought to you by the need to swich from Spotify (my alternative of choice was a physical MP3 player which sorted songs by the metadata in the MP3 files).
+MMMP3 is a basic Python utility for bulk editing mp3 file names and metadata, brought to you by the need to switch from Spotify (my alternative of choice was a physical MP3 player which sorted songs by the metadata in the MP3 files).
 ## Installation
 To install the program, just get all the relevant `.py` files in one folder and install all the needed dependencies:
 - `sys`, `os`, `functools`, `vlc` from standard library
@@ -27,7 +27,7 @@ If you chose option 3, for each MP3 file in the directory (other files will be s
     _Plays the file until you press_ `RETURN` _again. Useful for when you don't know what song it is just through the filename, for example._
 3. **Remove a prefix from the filename**
     _The same as the option discussed previously, but for individual files._
-4. **Automatically change the song\'s metadata title to the filename**
+4. **Automatically change the song's metadata title to the filename**
 5. **Edit the file's metadata manually**
     _Allows you to set the MP3's saved title, artist and/or album manually if none of the other options satisfy you._
 
@@ -40,10 +40,10 @@ The following changes are planned to be released soon™:
     - Comments for each track
     - Year of release
     - Genre (There are like 190 genres available in the ID3 standard, with gems such as `136: Christian Gangsta Rap`, `109: [REDACTED] Groove` and `167: Industro-Goth`. I'm not making these up.)
-    - Album art, maybe? I don't know how many MP3 players support that
+    - Album art, maybe? I don't know how many MP3 players support that.
 - Command line options:
-    - `--help`, obviously
+    - `--help`, obviously.
     - `-v` for **verbosity** (shows each MP3 file edited in a directory)
-    - `-s` for safety level (the higher the safety level, the more confirmation is asked to edit files)
+    - `-s` for **safety** level (the higher the safety level, the more confirmation is asked to edit files)
     - `-a` for **autoplay** (when editing MP3 files manually, plays each one of them automatically)
     - `-ñ` para hacerlo disponible en **español**
