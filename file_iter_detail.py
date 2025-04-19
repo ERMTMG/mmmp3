@@ -23,6 +23,20 @@ def file_option_remove_prefix(file: os.DirEntry) -> None:
     if not affected:
         print(f'\tFilename wasn\'t changed - "{prefix}" is not the start of the filename!\n')
 
+def file_option_edit_filename(file: os.DirEntry) -> None:
+    oldFilename: str = file.name
+    newFilename: str = inquirer.text(
+        'Enter the file\'s new filename',
+        default = oldFilename
+    )
+    if not newFilename.endswith('.mp3'):
+        rawFilename, extension = os.path.splitext(newFilename)
+        newFilename = rawFilename + '.mp3'
+    if len(newFilename) > 0 and newFilename != oldFilename:
+        newPath: str = os.path.join(os.path.dirname(file.path), newFilename)
+        os.rename(file.path, newPath)
+        print(f'\tEdited filename to {newFilename}.\n')
+
 def file_option_auto_change_name(file: os.DirEntry) -> None:
     filename, _ = os.path.splitext(file.name)
     mp3_handle = get_mp3_file(file.path)
@@ -63,7 +77,8 @@ def dir_option_list_files_detail(dir_name: str) -> None:
                 ('Skip to the next file', -1),
                 ('Listen to the file briefly', 0),
                 ('Remove a prefix from the file\'s filename', 1),
-                ('Automatically change the song\'s metadata name to the filename', 2),
+                ('Edit the file\'s filename manually', 4),
+                ('Automatically change the song\'s metadata title to the filename', 2),
                 ('Edit the file\'s metadata (artist, album, name...) manually', 3),
             ])
             match option:
@@ -76,10 +91,16 @@ def dir_option_list_files_detail(dir_name: str) -> None:
                     audio.stop()
                 case 1:
                     file_option_remove_prefix(file)
+                    print('\t\033[1;91mSkipping automatically to next file because filename was invalidated...\n\033[0m')
+                    file = next(file_iter, None)
                 case 2:
                     file_option_auto_change_name(file)
                 case 3:
                     file_option_manual_edit(file)
+                case 4:
+                    file_option_edit_filename(file)
+                    print('\t\033[1;91mSkipping automatically to next file because filename was invalidated...\n\033[0m')
+                    file = next(file_iter, None)
                 
                     
                     
