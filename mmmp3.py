@@ -17,16 +17,16 @@ if __name__ == '__main__':
     )
     parser.add_argument('directories', nargs='+',
                         help='The directories over which the program will operate.')
-    parser.add_argument('--verbose', '--verbosity', '-v', action='store_true',
+    parser.add_argument('--verbose', '--verbosity', '-v', action='store_true', default=0,
                         help='Will notify of each individual file edited when enabled.')
     parser.add_argument('--safety', '-s', type=int, nargs='?', default=1, const=1,
                         help='Level of sensitivity to editing files. The higher it is, '
                         'the more confirmation will be asked to edit files. '
                         'Default is 1, min is 0 and max is 3.')
-    parser.add_argument('--autoplay', '-a', action='store_true',
+    parser.add_argument('--autoplay', '-a', action='store_true', default=0,
                         help='Autoplays each song when editing MP3s in a directory.')
-    parser.add_argument('--español', '-ñ', action='store_true',
+    parser.add_argument('--español', '-ñ', action='store_true', default=0,
                         help='Muestra la interfaz en español.')
     args: argparse.Namespace = parser.parse_args()
-    main(args.directories)
+    main(args.directories, args.verbose, args.safety, args.autoplay, args.español)
      
